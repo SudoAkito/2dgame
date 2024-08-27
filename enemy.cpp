@@ -8,6 +8,7 @@
 #include"bullet.h"
 #include"enemy.h"
 #include"explosion.h"
+#include "score.h"
 
 //マクロ定義
 #define NUM_ENEMY (1)                 //敵の種類
@@ -260,6 +261,7 @@ void HitEnemy(int nCntEn, int nDmg)
 	{
 		SetExplosion(g_aEnemy[nCntEn].pos, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f), g_aEnemy[nCntEn].rot, g_aEnemy[nCntEn].fLength);
 		g_aEnemy[nCntEn].bUse = false;
+		AddScore(1000);
 		g_nNumEnemy--;                //敵の総数カウントダウン
 	}
 	else

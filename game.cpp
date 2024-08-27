@@ -14,10 +14,12 @@
 #include"enemy.h"
 #include"fade.h"
 #include"score.h"
+#include"pause.h"
 
 //グローバル変数
 GAMESTATE g_gameState = GAMESTATE_NONE;   //ゲームの状態
 int g_nCounterGameState = 0;              //状態管理カウンター
+bool g_bPause = false;                    //ポーズ中かどうか
 
 //------------------------------------------
 //ゲーム画面の初期化処理
@@ -46,9 +48,14 @@ void InitGame(void)
 	InitEnemy();
 	SetEnemy(D3DXVECTOR3(800.0f, 350.0f, 0.0f),0);
 
+	//ポーズ
+	InitPause();
+
 	g_gameState = GAMESTATE_NORMAL;    //通常状態に設定
 
 	g_nCounterGameState = 0;
+
+	g_bPause = false;                 //ポーズ解除
 }
 
 //------------------------------------------
@@ -86,26 +93,39 @@ void UpdateGame(void)
 
 	int nNum;
 
-	//背景
-	UpdateBackground();
+	if (KeyboardTrigger(DIK_P) == true)
+	{  //P（ポーズキー）が押された
+		g_bPause = g_bPause ? false : true;
+	}
+	
+	if (g_bPause == true)
+	{//ポーズ中
+		//ポーズ更新処理
+		UpdatePause();
+	}
+	else
+	{
+		//背景
+		UpdateBackground();
 
-	//プレイヤー
-	UpdatePlayer();
+		//プレイヤー
+		UpdatePlayer();
 
-	//スコアの更新
-	UpdateScore();
+		//スコアの更新
+		UpdateScore();
 
-	//弾
-	UpdateBullet();
+		//弾
+		UpdateBullet();
 
-	//爆発
-	UpdateExplosion();
+		//爆発
+		UpdateExplosion();
 
-	//エフェクト
-	UpdateEffect();
+		//エフェクト
+		UpdateEffect();
 
-	//敵
-	UpdateEnemy();
+		//敵
+		UpdateEnemy();
+	}
 
 	Player* pPlayer = GetPlayer();  //プレイヤーのポインタ
 	nNum=GetNumEnemy();
@@ -135,7 +155,7 @@ void UpdateGame(void)
 }
 
 //------------------------------------------
-// ゲームの更新処理
+// ゲームの描画処理
 //------------------------------------------
 void DrawGame(void)
 {
@@ -159,6 +179,12 @@ void DrawGame(void)
 
 	//敵
 	DrawEnemy();
+
+	if (g_bPause == true)
+	{//ポーズ中
+		//ポーズ描画処理
+		DrawPause();
+	}
 }
 
 //------------------------------------------
@@ -177,4 +203,12 @@ void SetGameState(GAMESTATE state)
 GAMESTATE GetGameState(void)
 {
 	return g_gameState;
+}
+
+//------------------------------------------
+//ポーズの有効無効設定
+//------------------------------------------
+void SetEnablePause(bool bPause)
+{
+	g_bPause = bPause;
 }

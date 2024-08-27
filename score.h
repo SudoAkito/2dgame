@@ -9,10 +9,17 @@
 
 #include"main.h"
 
+//スコア情報の構造体
+typedef struct
+{
+    bool bUse;//使用しているか
+    int nCountScoreCounter;//0のカウント
+}Score;
+
 //マクロ定義
 #define EIGHT (10000000)
 #define SEVEN (1000000)
-#define MAX_KETA (8)
+#define MAX_SCORE (8)
 
 //プロトタイプ宣言
 void InitScore(void);

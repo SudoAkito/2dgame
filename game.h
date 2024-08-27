@@ -25,5 +25,6 @@ void UpdateGame(void);
 void DrawGame(void);
 void SetGameState(GAMESTATE state);
 GAMESTATE GetGameState(void);
+void SetEnablePause(bool bPause);
 
 #endif
